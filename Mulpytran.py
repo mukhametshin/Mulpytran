@@ -1,10 +1,11 @@
-﻿#This script and included resource(s) are licensed under GNU GPLv3 license
+﻿#!/usr/bin/env python2.7
+
+#This script and included resources are licensed under GNU GPLv3 license
 #Please read http://www.gnu.org/copyleft/gpl.html for more information
 #
 #Mulpytran is a small Python script to query word translations by the
 #use of the Multitran.ru online dictionary
 
-#!/usr/bin/env python2.7
 
 import sys
 
