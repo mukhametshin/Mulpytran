@@ -1,4 +1,6 @@
-﻿#!/usr/bin/env python2.7
+#!/usr/bin/env python
+# encoding=utf-8
+
 
 #This script and included resources are licensed under GNU GPLv3 license
 #Please read http://www.gnu.org/copyleft/gpl.html for more information
@@ -24,7 +26,7 @@ except:
 class App:
     def __init__( self ):
         self.builder = Gtk.Builder()
-        self.builder.add_from_file('Mulpytran.glade')
+        self.builder.add_from_file('/usr/lib/Mulpytran/Mulpytran.glade')
         self.window = self.builder.get_object("windowMain")
 
         #Close the app by the x-button
@@ -36,7 +38,7 @@ class App:
         scroll=self.builder.get_object("scrolledWindow")
         scroll.add(self.htm)
         self.builder.get_object("boxTransl").pack_start(scroll, True, True, 0)
-        
+
         #Define list of language for the query
         lang_store=["Eng","Ger","Esp","Fra","Ned","Ita","Lat","Est","Est<->Eng","Afr","Eng<->Ger","Esper","Kalm"]
 
@@ -49,7 +51,7 @@ class App:
             self.langComboBoxText.append_text(lang)
         langBox.pack_start(self.langComboBoxText, False, False, 0)
         self.langComboBoxText.set_active(0)
-        
+
         #A dictionary with the signal handlers
         dic = {
         "on_windowMain_destroy" : self.quit,
@@ -58,14 +60,14 @@ class App:
         "on_gtk_about_activate": self.aboutDialog_open,
         "on_wordEntry_activate": self.mu_query
         }
-        
+
         #Additional handlers
         self.langComboBoxText.connect("changed", self.on_langComboBoxText_changed)
         self.windowAbout = self.builder.get_object("aboutDialog")
         self.builder.connect_signals(dic)
-        
+
         self.window.show_all()
-        
+
     def main( self ):
         Gtk.main()
 
@@ -75,7 +77,7 @@ class App:
 
     def quit( self, widget ):
         Gtk.main_quit()
-        
+
     def menuitem_quit( *args ):
         sys.exit(0)
 
@@ -83,7 +85,7 @@ class App:
         text=combo.get_active_text()
         if text != "":
             self.mu_query(self.builder.get_object("queryButton"))
-    
+
     def parsing( self, tbl ):
     # This function parses the multitran page and returns the word definitions table
         matching_start='<table border="0" cellspacing="0" cellpadding="0"><tr><td bgcolor="#DBDBDB"'
@@ -97,7 +99,7 @@ class App:
                 if matching_end in item:
                     return "<head></head><body>" + "\n".join(parsed) + "</body>"
                     break
-    
+
     def mu_query( self, *args ):
     # This function requests a translation
     # of the word from the server http://www.multitran.ru
@@ -131,7 +133,7 @@ class App:
             lang_code = "?l1=35&CL=1&a=0&s="
         #elif lang == "Jap":
         #    lang_code = "?l1=28&CL=1&a=0&s="
-        
+
         link = 'http://89.108.112.70/c/m.exe' + str(lang_code) + str(word)
         r = requests.get(link)
         r.encoding = 'Windows-1251'
@@ -147,7 +149,6 @@ class App:
             errorMessage="<head></head><body>Ошибка соединения: " + str(r.status_code) + "</body>"
             self.htm.load_html_string(errorMessage, "file://")
 
-	        
 if __name__ == "__main__":
     app = App()
     app.main()
